@@ -1,0 +1,864 @@
+{
+  "HARPA_AI_Advanced_Functionality": {
+    "Custom_Command_Creation": {
+      "Advanced_Command_Example": {
+        "title": "Advanced Command Example",
+        "description": "An example of a complex HARPA AI command.",
+        "category": "User",
+        "steps": [
+          {
+            "type": "navigate",
+            "url": "https://example.com",
+            "meta": {
+              "waitForIdle": true
+            }
+          }
+        ]
+      }
+    },
+    "Parameter_Management": {
+      "Predefined_Parameters": {
+        "description": "Predefined parameters are automatically injected into prompts to provide dynamic content from the web page context.",
+        "parameters": [
+          "{{page}}",
+          "{{selection}}",
+          "{{title}}",
+          "{{desc}}",
+          "{{url}}",
+          "{{domain}}",
+          "{{language}}",
+          "{{transcript}}",
+          "{{transcriptPlain}}",
+          "{{message x}}",
+          "{{serp term}}",
+          "{{gpt}}"
+        ],
+        "examples": {
+          "page_options": [
+            "{{page url}}",
+            "{{page query}}",
+            "{{page limit=500}}"
+          ],
+          "global_parameters": [
+            "{{g.p1}}",
+            "{{g.email}}"
+          ],
+          "dot_notation": [
+            "{{users.0.name.toUpperCase}}"
+          ]
+        }
+      },
+      "Custom_Parameters": {
+        "description": "Custom parameters allow for dynamic content to be injected into commands.",
+        "example": {
+          "calc_set": {
+            "type": "calc",
+            "do": "set",
+            "param": "p1",
+            "expression": "Extracted Data"
+          }
+        }
+      }
+    },
+    "Basic_Automation_Steps": {
+      "SAY_ASK_GPT": [
+        {
+          "id": "say_step",
+          "description": "The SAY step is used to send a formatted message to the chat. It supports markdown syntax for message enhancement.",
+          "usage": "To provide instructions, reminders, or echo parameter values."
+        },
+        {
+          "id": "ask_step",
+          "description": "The ASK step prompts the user for input, stores the response as a parameter, and allows for dialog customization.",
+          "usage": "To gather input from the user that can be referenced in subsequent steps."
+        },
+        {
+          "id": "gpt_step",
+          "description": "The GPT step sends a prompt to a large language model and stores the response as a parameter, which can be referenced in other steps.",
+          "usage": "To generate content, provide information, or continue a conversation flow based on user input."
+        }
+      ]
+    },
+    "Building_Sophisticated_Use_Cases": {
+      "Advanced_Implementation": {
+        "Sample_Advanced_Use_Case": {
+          "meta": {
+            "title": "Data Aggregation and Reporting",
+            "description": "Aggregates data from various sources and compiles a report.",
+            "category": "Data Analysis"
+          },
+          "steps": []
+        },
+        "Modular_Command_Structure": {}
+      }
+    },
+    "Commands_Documentation": {
+      "Navigate_Command": {
+        "id": "navigate_command",
+        "category": "Commands",
+        "tags": [
+          "navigate",
+          "url",
+          "refresh",
+          "parameterized navigation"
+        ],
+        "details": {
+          "description": "Navigates the current tab to a specified URL or refreshes the page if the URL is empty.",
+          "syntax": {
+            "full_version": "- type: navigate\n  url: 'https://google.com'",
+            "short_version": "- navigate: 'https://google.com'",
+            "missing_protocol": "- navigate: 'google.com'",
+            "relative_path": "- navigate: '/search'",
+            "reload_page": "- navigate: ''"
+          },
+          "examples": {
+            "website_summary": {
+              "description": "Navigate to a website and summarize its content.",
+              "chatml_declaration": "- type: navigate\n  url: https://www.washingtonpost.com/business/technology/\n  waitForIdle: true\n- type: gpt\n  prompt: 'Please analyze the data...'"
+            },
+            "parameterized_search": {
+              "description": "Conduct a Google search using a parameterized query.",
+              "chatml_declaration": "- type: ask\n  message: 'What would you like me to Google for you?'\n  param: p1\n  default: ''\n- type: navigate\n  url: 'google.com/search?q={{p1}}'\n  waitForIdle: true"
+            }
+          }
+        }
+      },
+      "Wait_Command": {
+        "id": "wait_command",
+        "category": "Commands",
+        "tags": [
+          "wait",
+          "delay",
+          "loading",
+          "synchronization"
+        ],
+        "details": {
+          "description": "Pauses the execution for a specified condition or amount of time, ensuring synchronization with page events or elements.",
+          "syntax": {
+            "wait_for_idle": "- type: wait\n  for: idle\n  timeout: 15000",
+            "custom_delay": "- type: wait\n  for: custom-delay\n  delay: 1000",
+            "random_delay": "- type: wait\n  for: random-delay\n  minDelay: 500\n  maxDelay: 3000",
+            "text_appearance": "- type: wait\n  for: text-to-appear\n  text: 'Login'\n  timeout: 15000",
+            "text_disappearance": "- type: wait\n  for: text-to-disappear\n  text: 'Loading'\n  timeout: 15000",
+            "element_appearance": "- type: wait\n  for: element-to-appear\n  selectorType: ai\n  selector: [{ '$tag': 'H1' }]\n  timeout: 15000",
+            "element_disappearance": "- type: wait\n  for: element-to-disappear\n  selectorType: ai\n  selector: [{ '$tag': 'H1' }]\n  timeout: 15000",
+            "js_function_resolution": "- type: wait\n  for: js-function\n  code: 'return document.querySelector(\\'h1\\')'\n  timeout: 15000"
+          }
+        }
+      },
+      "Request_Step": {
+        "id": "request_step",
+        "category": "Commands",
+        "tags": [
+          "scraping",
+          "RSS_feeds",
+          "webpage",
+          "HTML",
+          "webhook",
+          "api",
+          "http",
+          "zapier",
+          "ifttt",
+          "discord",
+          "telegram"
+        ],
+        "details": {
+          "description": "The REQUEST step is used to perform HTTP GET / POST requests to specified URLs, often used to send data to webhooks or APIs, and to fetch web page HTML content.",
+          "usage": "For accessing APIs, HTML webpages (including RSS Feeds), sending data to webhooks, triggers Zapier or Make.com for IFTTT chains. Supports parameter substitution in the URL, body, and headers. The response is captured in a parameter for subsequent use.",
+          "response_handling": "Use the SAY step to print out the response parameter and inspect the data returned by the request.",
+          "test_tip": "Test webhook data transfer using webhook.site.",
+          "chatml_declaration": {
+            "type": "request",
+            "url": "https://webhook.site/unique-id",
+            "method": "post",
+            "headers": {
+              "Authorization": "Bearer token"
+            },
+            "body": {
+              "url": "{{url}}",
+              "data": "{{gpt}}"
+            },
+            "auth": {
+              "enabled": true,
+              "username": "username",
+              "password": "password"
+            },
+            "param": "response"
+          }
+        }
+      },
+      "Extract_Step": {
+        "id": "extract_step",
+        "category": "Commands",
+        "tags": [
+          "extract",
+          "data",
+          "selectors",
+          "ai_element_selectors",
+          "web_scraping"
+        ],
+        "details": {
+          "description": "The EXTRACT step retrieves information from web elements using AI Element Selectors. It's versatile and can be used to scrape various types of data from web pages.",
+          "use_cases": "Retrieve data such as social media followers count, post messages, product prices, or article outlines.",
+          "data_storage": "The extracted data is stored in the specified parameter, with a default fallback if no matching selector is found.",
+          "selector_customization": "Selectors can be customized manually or with the aid of a 'Grab' button.",
+          "chatml_declaration": {
+            "type": "extract",
+            "selectorType": "ai",
+            "selector": [
+              {
+                "$matches": [
+                  {
+                    "$tag": "H1"
+                  },
+                  {
+                    "$role": "heading"
+                  },
+                  {
+                    "$class": "PostContent__title"
+                  },
+                  {
+                    "$style": "Poppins:48px:600:normal"
+                  },
+                  {
+                    "$content": "Extract & Content Steps"
+                  },
+                  {
+                    "$class": "PostContent__header",
+                    "traverse": "1"
+                  },
+                  {
+                    "$class": "PostContent__content",
+                    "traverse": "0:1"
+                  },
+                  {
+                    "$class": "PostContent",
+                    "traverse": "1:0:1"
+                  },
+                  {
+                    "$class": "Page__content",
+                    "traverse": "0:1:0:1"
+                  },
+                  {
+                    "$class": "Page",
+                    "traverse": "0:0:1:0:1"
+                  },
+                  {
+                    "$anchor": "CONTENTS",
+                    "shift": "79:-132"
+                  },
+                  {
+                    "$text": "CONTENTS",
+                    "traverse": "-3:0:1"
+                  },
+                  {
+                    "$anchor": "HARPA.AI",
+                    "shift": "77:150"
+                  },
+                  {
+                    "$text": "HARPA.AI",
+                    "traverse": "-3:1:0:1"
+                  },
+                  {
+                    "$anchor": "Overview",
+                    "shift": "67:-184"
+                  },
+                  {
+                    "$text": "Overview",
+                    "traverse": "-4:0:1"
+                  }
+                ],
+                "min": 5
+              },
+              {
+                "$size": 1
+              }
+            ],
+            "param": "extractedData",
+            "default": "No data found"
+          }
+        }
+      },
+      "Flow_Control_Steps": {
+        "Group_and_Jump": {
+          "group_step": {
+            "id": "group_step",
+            "category": "Flow Control",
+            "tags": ["group", "complex commands", "iteration", "navigation"],
+            "details": {
+              "description": "The GROUP step is utilized to combine multiple related steps, simplifying the creation of complex commands and improving navigation.",
+              "usage": {
+                "creating_group": "To create a group, use the ADD STEP button and select GROUP. Assign labels for ease of navigation.",
+                "simplification": "Groups simplify the command structure, especially when crafting iterative commands or procedures referred to by JUMP steps."
+              },
+              "chatml_declaration": {
+                "basic_group": {
+                  "description": "Example of a GROUP step with conditions and multiple nested steps.",
+                  "code": [
+                    "- condition: '{{change}} = refine'",
+                    "  type: group",
+                    "  steps:",
+                    "    - type: ask",
+                    "      param: instructions",
+                    "      message: 'What changes would you like me to make?'",
+                    "    - type: gpt",
+                    "      prompt: 'Please rewrite your answer, taking into account my additional instructions. Provide a rewritten response.'",
+                    "        'Additional instructions: {{instructions}}'",
+                    "        'Rewritten response:'"
+                  ]
+                },
+                "with_stop": {
+                  "description": "Example of using the STOP step to interrupt the current group.",
+                  "code": [
+                    "- condition: '{{change}} = refine'",
+                    "  type: group",
+                    "  steps:",
+                    "    - type: ask",
+                    "      param: instructions",
+                    "      message: 'What changes would you like me to make?'",
+                    "    - type: gpt",
+                    "      prompt: 'Please rewrite your answer, taking into account my additional instructions. Provide a rewritten response.'",
+                    "        'Additional instructions: {{instructions}}'",
+                    "        'Rewritten response:'",
+                    "    - type: stop"
+                  ]
+                }
+              }
+            }
+          },
+          "jump_step": {
+            "id": "jump_step",
+            "category": "Flow Control",
+            "tags": ["jump", "workflow", "loops", "conditions"],
+            "details": {
+              "description": "The JUMP step redirects execution to a specific step identified by a label, enabling loops and conditional workflows.",
+              "usage": {
+                "basic_jump": "To jump to a step, use its label. Be cautious to avoid creating unintentional infinite loops.",
+                "conditional_jump": "JUMPs can be paired with conditions to control when they are triggered."
+              },
+              "chatml_declaration": {
+                "basic_usage": {
+                  "description": "Basic JUMP step usage, including short and full version syntax.",
+                  "code": [
+                    "- type: jump",
+                    "  to: label-a",
+                    "- jump: label-a"
+                  ]
+                },
+                "infinite_loop_warning": {
+                  "description": "Warning example of an infinite loop created with JUMP.",
+                  "code": [
+                    "- say: 'Hello world!'",
+                    "  label: infinite",
+                    "- jump: infinite"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "Loop_Step": {
+          "id": "loop_step",
+          "category": "Flow Control",
+          "tags": ["loop", "iteration", "automation", "arrays", "OpenAI API"],
+          "details": {
+            "description": "LOOP steps are used to iterate over list parameters (arrays) for tasks such as mass-automation, monitoring, data extraction, or contact processing. They are fundamental for many of HARPA AI's advanced functionalities.",
+            "limitations": "LOOP steps are limited to OpenAI API key connections to comply with OpenAI's Terms of Service.",
+            "default_parameter": "{{list}}",
+            "examples": [
+              {
+                "description": "Array of YouTube video information",
+                "array": [
+                  {
+                    "url": "https://www.youtube.com/watch?v=B-8Is-2ocv0",
+                    "title": "The 'Most Creative' Place In The World",
+                    "views": 470,
+                    "publishedTimeAgo": "2 weeks"
+                  },
+                  {
+                    "url": "https://www.youtube.com/watch?v=TAgLw1KKE34",
+                    "title": "The Science of Storytelling",
+                    "views": 1221,
+                    "publishedTimeAgo": "3 months"
+                  }
+                ]
+              },
+              {
+                "description": "Array of fruits",
+                "array": [
+                  {"fruit": "Mango"},
+                  {"fruit": "Pomegranate"}
+                ]
+              }
+            ],
+            "setting_array_values": {
+              "description": "The CALC step is used to set the value of the data array with a named parameter, by default {{list}}.",
+              "js_code_generation": {
+                "description": "JavaScript can be used to automatically generate an array. GPT-4 can assist in crafting the JS code for array generation.",
+                "example": "JavaScript code to extract YouTube video information from a webpage."
+              },
+              "web_inspection_details": {
+                "description": "Use the Inspect tool on webpages to analyze HTML and generate JavaScript code for arrays.",
+                "instructions": [
+                  "Right-click and select 'Inspect' on any page element.",
+                  "Hover over the code and click 'Edit as HTML' to copy."
+                ]
+              }
+            },
+            "loop_step_setup": {
+              "description": "To set up a LOOP step, add the step to your command, set the list parameter, and edit child steps to operate on each list item.",
+              "say_step_example": "Adding a SAY step within a LOOP to iterate over items.",
+              "dot_notation_access": "Use dot notation to access properties on list items within a LOOP."
+            },
+            "use_cases": {
+              "description": "LOOPs are versatile and can be used for tasks like navigating multiple URLs or interacting with social media posts to increase traffic to a profile."
+            }
+          }
+        }
+      },
+      "Conditions_Step": {
+        "id": "conditions_step",
+        "category": "Flow Control",
+        "tags": ["CONDITIONS", "workflow", "HARPA AI", "dynamic", "user input", "parameters"],
+        "details": {
+          "description": "The CONDITIONS step configuration for HARPA AI's advanced workflows.",
+          "condition_syntax": [
+            {
+              "operator": "=",
+              "description": "Check if X equals to Y",
+              "example": "x = y",
+              "case_sensitive": false
+            },
+            {
+              "operator": "!=",
+              "description": "Check if X is not equal to Y",
+              "example": "x != y",
+              "case_sensitive": false
+            },
+            {
+              "operator": ">",
+              "description": "Cast X and Y to number, check if X is greater than Y",
+              "example": "x > y",
+              "case_sensitive": true
+            },
+            {
+              "operator": ">=",
+              "description": "Cast X and Y to number, check if X is greater or equal to Y",
+              "example": "x >= y",
+              "case_sensitive": true
+            },
+            {
+              "operator": "<",
+              "description": "Cast X and Y to number, check if X is less than Y",
+              "example": "x < y",
+              "case_sensitive": true
+            },
+            {
+              "operator": "<=",
+              "description": "Cast X and Y to number, check if X is less or equal to Y",
+              "example": "x <= y",
+              "case_sensitive": true
+            },
+            {
+              "operator": "=~",
+              "description": "Check if X matches regex Y",
+              "example": "x =~ y",
+              "case_sensitive": true
+            }
+          ],
+          "operator_formatting": {
+            "correct": "x = y",
+            "incorrect": "x=y"
+          },
+          "parameter_substitution": "ChatML engine computes the left and the right part of condition before performing a step using the values of parameters if referenced.",
+          "grammar_check_workflow": {
+            "description": "Example workflow for grammar checking and translation using CONDITIONS.",
+            "steps": [
+              {
+                "type": "ask",
+                "param": "p1",
+                "message": "Please provide the text that needs to be corrected for grammar and syntax."
+              },
+              {
+                "type": "gpt",
+                "prompt": "Prompt for grammar correction in specified language."
+              },
+              {
+                "type": "ask",
+                "label": "ask-for-change",
+                "param": "change",
+                "options": [
+                  {
+                    "label": "✅ DONE",
+                    "value": "no"
+                  },
+                  {
+                    "label": "🇫🇷 TRANSLATE TO FRENCH",
+                    "value": "french"
+                  },
+                  {
+                    "label": "🛠️ CUSTOM TRANSLATE",
+                    "value": "custom"
+                  }
+                ]
+              },
+              {
+                "condition": "{{change}} = no",
+                "type": "stop"
+              },
+              {
+                "condition": "{{change}} = french",
+                "type": "gpt",
+                "prompt": "Prompt for translation to French."
+              },
+              {
+                "condition": "{{change}} = custom",
+                "type": "group",
+                "steps": [
+                  {
+                    "type": "ask",
+                    "param": "translate",
+                    "message": "Please specify target language:"
+                  },
+                  {
+                    "type": "gpt",
+                    "prompt": "Prompt for translation to specified language."
+                  }
+                ]
+              },
+              {
+                "type": "jump",
+                "to": "ask-for-change"
+              }
+            ]
+          },
+          "step_silencing": "Most steps log messages to chat, but can be silenced so they will not print any messages to chat."
+        }
+      }
+    },
+    "Advanced_Features": {
+      "Run_JS": {
+        "id": "run_js",
+        "category": "Advanced",
+        "tags": [
+          "javascript",
+          "runjs",
+          "interaction",
+          "parsing",
+          "scraping",
+          "DOM manipulation"
+        ],
+        "details": {
+          "description": "Executes custom JavaScript code within the scope of the opened web page, allowing for complex interactions and data retrieval.",
+          "usage": {
+            "arithmetic_operations": "Performing arithmetic operations.",
+            "clear_text_content": "Clearing text content with regular expressions.",
+            "extracting_values": "Extracting values from the page DOM.",
+            "scraping_data": "Scraping data from the page DOM.",
+            "hiding_page_elements": "Hiding elements on page."
+          },
+          "storage": "Stores the result of the executed JavaScript in a specified parameter, defaulting to {{param}}.",
+          "examples": [
+            {
+              "title": "Summing Values",
+              "description": "Sums up two user-provided values and displays the result.",
+              "yaml": "meta:\n  title: Sum values\n  description: ''\n  category: User\n  name: cmd-sum-values\nsteps:\n  - type: ask\n    message: 'Please provide p1:'\n    param: p1\n    default: ''\n  - type: ask\n    message: 'Please provide p2:'\n    param: p2\n    default: ''\n  - type: js\n    code: return Number(args.p1) + Number(args.p2)\n    args: p1, p2\n    param: sum\n  - type: say\n    message: The sum is {{sum}}\nversion: 1"
+            },
+            {
+              "title": "Hiding Elements by Text",
+              "description": "Hides elements containing specified text.",
+              "yaml": "meta:\n  title: Hide elements by text\n  description: ''\n  category: User\n  name: cmd-hide-elements-by-text\nsteps:\n  - type: ask\n    message: What to hide?\n    param: text\n    default: ''\n  - type: js\n    code: |\n      const elements = $harpa.query.run(\n      { $text: args.text }, { mult: true })\n\n      elements.forEach(e => e.remove())\n      args: text\nversion: 1"
+            },
+            {
+              "title": "Extracting Data from Page",
+              "description": "Extracts all prices from the page and presents them.",
+              "yaml": "meta:\n  title: Find prices\n  description: ''\n  category: User\n  name: cmd-find-prices\nsteps:\n  - type: js\n    code: |\n      const items = await $harpa.parser\n      .parse(null, { extract: true })\n\n      return items\n      .filter(i => i.type === 'price')\n      .map(p => ({\n      value: p.value,\n      metric: p.metric,\n      }))\n      param: prices\n  - type: say\n    message: 'Prices are: ```{{prices}}```'\nversion: 1"
+            },
+            {
+              "title": "Extracting YouTube Video Links",
+              "description": "Extracts YouTube video links from the current page.",
+              "yaml": "- type: js\n  code: |\n    return Array\n    .from(document.querySelectorAll('a[href*=\"/watch\"]'))\n    .map(a => {\n      const ariaLabel = a.getAttribute('aria-label') || ''\n      const viewsMatch = ariaLabel.match(/(\\d[\\d,]*) views/)\n      const timeAgoMatch = ariaLabel.match(/views (.+) ago/)\n      const url = new URL(a.href)\n\n      return {\n        url: 'https://www.youtube.com' + url.pathname + '?v=' + url.searchParams.get('v'),\n        title: a.getAttribute('title') || a.innerText.trim(),\n        views: viewsMatch ? parseInt(viewsMatch[1].replace(/,/g, '')) : null,\n        publishedTimeAgo: timeAgoMatch ? timeAgoMatch[1].trim() : null\n      }\n    })\n    .filter(item => item.url.includes('/watch?v=') && item.views !== null && item.publishedTimeAgo !== null)\n    param: videos\n    silent: true"
+            }
+          ],
+          "asyncSupport": {
+            "description": "Supports asynchronous JavaScript functions using the await keyword.",
+            "timeout": "HARPA AI will terminate the RUN JS step after 15 seconds if it doesn't receive a response."
+          },
+          "availableAPIs": [
+            {
+              "method": "$harpa.page.click",
+              "description": "Clicks elements on the page."
+            }
+          ]
+        }
+      },
+      "Calc_Step": {
+        "id": "calc_step",
+        "category": "Commands",
+        "tags": [
+          "parameters",
+          "extraction",
+          "numbers",
+          "texts",
+          "lists",
+          "calc_step"
+        ],
+        "details": {
+          "description": "The CALC step in HARPA AI enables complex parameter manipulations, data extractions, text transformations, numerical operations, and list manipulations.",
+          "functions": {
+            "parameters": {
+              "description": "Set and clone parameter values.",
+              "examples": [
+                {
+                  "description": "Capture the current page's URL into a parameter.",
+                  "chatml": "- type: calc\n  func: set\n  param: saved.url\n  format: auto\n  value: '{{url}}'"
+                },
+                {
+                  "description": "Make a copy of a parameter or a list.",
+                  "chatml": "- type: calc\n  func: clone\n  from: gpt\n  to: cloned.gpt"
+                }
+              ]
+            },
+            "extraction": {
+              "description": "Extract data from text parameters using extraction functions.",
+              "examples": [
+                {
+                  "description": "Extract all prices from a web page and store them in the {{prices}} parameter.",
+                  "chatml": "- type: calc\n  func: extract-data\n  to: prices\n  param: page\n  data: price\n  index: all"
+                }
+              ]
+            },
+            "increment": {
+              "description": "Increment a numerical parameter value.",
+              "examples": [
+                {
+                  "description": "Increment a user ID.",
+                  "chatml": "- type: calc\n  func: increment\n  param: userID\n  delta: '1'"
+                }
+              ]
+            },
+            "texts": {
+              "description": "Manipulate text through various text functions.",
+              "examples": [
+                {
+                  "description": "Change text case.",
+                  "chatml": "- type: calc\n  func: change-case\n  to: text\n  param: text\n  case: upper"
+                },
+                {
+                  "description": "Take the first line from a parameter's text.",
+                  "chatml": "- type: calc\n  func: first-line\n  to: first.line\n  param: text"
+                },
+                {
+                  "description": "Split text by a delimiter.",
+                  "chatml": "- type: calc\n  func: split\n  to: splitted.text\n  param: text\n  delimiter: ', '"
+                },
+                {
+                  "description": "Replace text using regex.",
+                  "chatml": "- type: calc\n  func: replace\n  to: text\n  param: text\n  regex: /(\\d{1,2}):(\\d{2})/gmi\n  template: $1 hours $2 minutes"
+                },
+                {
+                  "description": "Match and extract text using regex.",
+                  "chatml": "- type: calc\n  func: match\n  to: search.result\n  param: text\n  regex: /(\\d{1,2}):(\\d{2})/gmi\n  template: $1 hours $2 minutes"
+                }
+              ]
+            },
+            "lists": {
+              "description": "Perform operations on lists such as adding, filtering, updating, and merging items.",
+              "examples": [
+                {
+                  "description": "Add an item to a list.",
+                  "chatml": "- type: calc\n  func: list-add\n  index: last\n  list: list\n  item: param"
+                },
+                {
+                  "description": "Filter items in a list.",
+                  "chatml": "- type: calc\n  func: list-filter\n  list: list\n  item: param\n  match: '{ \"name\": John }'\n  matched: retain"
+                },
+                {
+                  "description": "Update items in a list.",
+                  "chatml": "- type: calc\n  func: list-update\n  list: list\n  match: '{ \"status\": in progress }'\n  prop: '{ \"status\": null }'"
+                },
+                {
+                  "description": "Merge two lists by a given field name.",
+                  "chatml": "- type: calc\n  func: list-merge\n  to: merged.list\n  listA: a\n  listB: b\n  by: id"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "AI_Selectors": {
+        "id": "AI_Selectors",
+        "category": "Commands",
+        "tags": [
+          "selectors",
+          "ai_selectors"
+        ],
+        "description": "HARPA AI Selectors functionality for scraping and parsing",
+        "usage": [
+          "EXTRACT",
+          "CLICK",
+          "TYPE",
+          "WAIT"
+        ],
+        "selection_methods": {
+          "grab_button": "Select an element from the page using the 'Grab' button",
+          "manual_yaml": "Customize the selector manually in the YAML file"
+        },
+        "syntax": "YAML",
+        "attributes": [
+          "tag",
+          "class",
+          "text",
+          "content",
+          "role",
+          "style",
+          "anchor",
+          "css",
+          "xpath"
+        ],
+        "cheat_sheet": {
+          "common_selectors": [
+            {
+              "contains_text": "My Account"
+            },
+            {
+              "escaping": "Total views: {{data}}"
+            },
+            {
+              "closest_to_anchor": "$anchor: username"
+            },
+            {
+              "css": "$css: div.views-count > span"
+            },
+            {
+              "xpath": "$xpath: //div/span"
+            },
+            {
+              "parse": [
+                "- Total views: {{data}}",
+                "- $parse: number"
+              ]
+            },
+            {
+              "nth_element": [
+                "- $css: h2",
+                "- $at: 3"
+              ]
+            },
+            {
+              "aria_role": "$role: button"
+            }
+          ],
+          "operations": {
+            "and": {
+              "- $css": "h2",
+              "$text": "My Account"
+            },
+            "or": [
+              { "$css": "h2" },
+              { "$text": "My Account" }
+            ],
+            "matches": {
+              "$matches": [
+                { "$tag": "H1" },
+                { "$role": "heading" },
+                { "$class": "PostContent__title" },
+                { "$style": "Poppins:48px:600:normal" },
+                { "$content": "Extract & Content Steps" },
+                { "$class": "PostContent__header", "traverse": "1" },
+                { "$class": "PostContent__content", "traverse": "0:1" },
+                { "$class": "PostContent", "traverse": "1:0:1" },
+                { "$class": "Page__content", "traverse": "0:1:0:1" },
+                { "$class": "Page", "traverse": "0:0:1:0:1" },
+                { "$anchor": "CONTENTS", "shift": "79:-132" },
+                { "$text": "CONTENTS", "traverse": "-3:0:1" },
+                { "$anchor": "HARPA.AI", "shift": "77:150" },
+                { "$text": "HARPA.AI", "traverse": "-3:1:0:1" },
+                { "$anchor": "Overview", "shift": "67:-184" },
+                { "$text": "Overview", "traverse": "-4:0:1" }
+              ],
+              "min": 5
+            },
+            "size": {
+              "single_element": {
+                "$css": "h1",
+                "$size": 1
+              },
+              "range_of_elements": {
+                "$css": "a",
+                "$size": {
+                  "min": 1,
+                  "max": 5
+                }
+              }
+            }
+          }
+        }
+      },
+      "Text_Manipulation_And_Navigation": {
+        "Paste_Command": {
+          "id": "paste_command",
+          "category": "Commands",
+          "tags": ["paste", "automation", "selectors", "ProtonMail"],
+          "details": {
+            "description": "The PASTE command enables text insertion into text fields on web pages, targeting the largest field by default or specific fields with selectors.",
+            "function": "Facilitates automation of data entry such as usernames and passwords.",
+            "syntax": {
+              "default": "- paste: 'input_text'",
+              "with_selectors": "- paste: 'input_text'\n  selector: { conditions }"
+            },
+            "automation_example": {
+              "protonmail_login": {
+                "description": "Automates login to ProtonMail using HARPA AI.",
+                "steps": [
+                  {
+                    "action": "navigate",
+                    "url": "https://account.proton.me/login",
+                    "waitForIdle": true
+                  },
+                  {
+                    "action": "paste",
+                    "text": "harpa.ai@protonmail.com",
+                    "selector_conditions": {
+                      "min": 11,
+                      "$size": 1
+                    }
+                  },
+                  {
+                    "action": "paste",
+                    "text": "secure_password",
+                    "selector_conditions": {
+                      "min": 11,
+                      "$size": 1
+                    }
+                  },
+                  {
+                    "action": "click",
+                    "selector_conditions": {
+                      "min": 5,
+                      "$size": 1
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "Scroll_Workaround": {
+          "id": "scroll_workaround",
+          "category": "Commands",
+          "tags": ["scroll", "workaround", "javascript", "runjs"],
+          "details": {
+            "description": "The SCROLL command is not yet implemented. As a workaround, the RUN JS command can execute JavaScript for scrolling actions.",
+            "examples": {
+              "viewport_scroll": "- type: runjs\n  code: return $harpa.page.scroll()",
+              "bottom_scroll": "- type: runjs\n  code: return $harpa.page.scroll('bottom')",
+              "top_scroll": "- type: runjs\n  code: return $harpa.page.scroll('top')",
+              "custom_scroll": "- type: runjs\n  code: 'return $harpa.page.scroll({ y: 1000 })'"
+            }
+          }
+        }
+      }
+    }
+  }
+}
