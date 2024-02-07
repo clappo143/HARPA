@@ -1,21 +1,195 @@
 {
-  "HARPA_AI_Advanced_Functionality": {
-    "Custom_Command_Creation": {
-      "Advanced_Command_Example": {
-        "title": "Advanced Command Example",
-        "description": "An example of a complex HARPA AI command.",
-        "category": "User",
-        "steps": [
-          {
-            "type": "navigate",
-            "url": "https://example.com",
-            "meta": {
+    "HARPA_AI_Advanced_Functionality": {
+      "Custom_Command_Creation": {
+        "Advanced_Command_Example": {
+          "title": "🗞️ Google News: URL builder + NAV + Extractor / Parser 2.0",
+          "description": "Beta (v2) | (7 Feb24)",
+          "category": "User",
+          "yaml": [
+            {
+              "type": "clear"
+            },
+            {
+              "label": "SETUP",
+              "type": "group",
+              "steps": [
+                {
+                  "type": "calc",
+                  "func": "set",
+                  "param": "searchType",
+                  "value": "nws"
+                },
+                {
+                  "type": "calc",
+                  "func": "set",
+                  "param": "dateFilter",
+                  "value": ""
+                },
+                {
+                  "label": "COMMAND_FLOW_Q",
+                  "type": "ask",
+                  "param": "commandFlow",
+                  "message": "Select either Quick News search (query only) or Advanced search (define parameters).",
+                  "options": [
+                    {
+                      "label": "💨 Quick News Search",
+                      "value": "quick"
+                    },
+                    {
+                      "label": "Advanced Search",
+                      "value": "adv"
+                    }
+                  ],
+                  "default": ""
+                },
+                {
+                  "label": "QUERY",
+                  "type": "ask",
+                  "param": "query",
+                  "message": "Provide search query. Supports Google operators, e.g.: `some query (site:nytimes.com OR site:bbc.com) inurl:2024 -inurl:opinion -ext:pdf`",
+                  "default": ""
+                }
+              ]
+            },
+            {
+              "label": "ADVANCED",
+              "type": "group",
+              "steps": [
+                {
+                  "label": "SEARCH_TYPE",
+                  "type": "ask",
+                  "param": "searchType",
+                  "message": "News (default) or General search?",
+                  "options": [
+                    {
+                      "label": "🗞️ News",
+                      "value": "nws"
+                    },
+                    {
+                      "label": "General",
+                      "value": ""
+                    }
+                  ],
+                  "default": "nws"
+                },
+                {
+                  "label": "DATE_FILTER_SET",
+                  "type": "ask",
+                  "param": "dateFilter_set",
+                  "message": "Select Date Filter (Past hour/24hrs/week/year) or input custom dates (optional):",
+                  "options": [
+                    {
+                      "label": "🚫 No Date Filter",
+                      "value": "no_dateF"
+                    },
+                    {
+                      "label": "Past Hour",
+                      "value": "qdr:h"
+                    },
+                    {
+                      "label": "Past 24 Hours",
+                      "value": "qdr:d"
+                    },
+                    {
+                      "label": "Past Week",
+                      "value": "qdr:w"
+                    },
+                    {
+                      "label": "Past Month",
+                      "value": "qdr:m"
+                    },
+                    {
+                      "label": "Past Year",
+                      "value": "qdr:y"
+                    },
+                    {
+                      "label": "Custom Dates",
+                      "value": "custom"
+                    }
+                  ],
+                  "default": ""
+                },
+                {
+                  "type": "calc",
+                  "func": "set",
+                  "param": "dateFilter",
+                  "value": "&tbs={{dateFilter_set}}"
+                }
+              ]
+            },
+            {
+              "label": "BUILD_URL",
+              "type": "group",
+              "steps": [
+                {
+                  "label": "ENCODE_QUERY",
+                  "type": "calc",
+                  "func": "encode-url",
+                  "param": "query",
+                  "to": "encodedQuery"
+                },
+                {
+                  "type": "calc",
+                  "func": "set",
+                  "param": "builtURL",
+                  "value": "https://www.google.com/search?q={{encodedQuery}}&tbm={{searchType}}{{dateFilter}}"
+                },
+                {
+                  "type": "say",
+                  "message": "🔧 URL built for \"{{query}}\": `{{builtURL}}`"
+                }
+              ]
+            },
+            {
+              "type": "navigate",
+              "url": "{{builtURL}}",
               "waitForIdle": true
+            },
+            {
+              "label": "GPT",
+              "type": "gpt",
+              "prompt": "I am looking for articles by / about: \"{{query}}\". Please review the search RESULTS below and extract those that are relevant, presenting the items as a table with the following headers: Title, Date, Publication, Author, URL.",
+              "param": "gpt_parse"
+            },
+            {
+              "type": "ask",
+              "param": "progressQ",
+              "message": "New search or terminate Command?",
+              "options": [
+                {
+                  "label": "🔎 New Search",
+                  "value": "new_search"
+                },
+                {
+                  "label": "⛔ Terminate Command",
+                  "value": "end"
+                }
+              ],
+              "default": ""
+            },
+            {
+              "type": "jump",
+              "condition": "{{progressQ}} = new_search",
+              "to": "SETUP"
+            },
+            {
+              "type": "stop"
+            }
+          ],
+          "share": {
+            "isPublic": false
+          },
+          "version": 1
+        },
+        "Advanced_Command_Example_ChatML": {
+            "description": "ChatML version of the advanced command for concise reference.",
+            "chatml": "- type: clear\n- label: SETUP\n  type: group\n  steps:\n    - type: calc\n      func: set\n      param: searchType\n      value: 'nws'\n    - type: calc\n      func: set\n      param: dateFilter\n      value: ''\n    - label: COMMAND_FLOW_Q\n      type: ask\n      param: commandFlow\n      message: 'Select either Quick News search (query only) or Advanced search (define parameters).'\n      options:\n        - label: 💨 Quick News Search\n          value: quick\n        - label: Advanced Search\n          value: adv\n    - label: QUERY\n      type: ask\n      param: query\n      message: 'Provide search query. Supports Google operators, e.g.: `some query (site:nytimes.com OR site:bbc.com) inurl:2024 -inurl:opinion -ext:pdf`'\n- label: ADVANCED\n  type: group\n  condition: '{{commandFlow}} = adv'\n  steps:\n    - label: SEARCH_TYPE\n      type: ask\n      param: searchType\n      message: 'News (default) or General search?'\n      options:\n        - label: 🗞️ News\n          value: nws\n        - label: General\n          value: ''\n    - label: DATE_FILTER_SET\n      type: ask\n      param: dateFilter_set\n      message: 'Select Date Filter (Past hour/24hrs/week/year) or input custom dates (optional):'\n      options:\n        - label: 🚫 No Date Filter\n          value: no_dateF\n        - label: Past Hour\n          value: qdr:h\n        - label: Past 24 Hours\n          value: qdr:d\n        - label: Past Week\n          value: qdr:w\n        - label: Past Month\n          value: qdr:m\n        - label: Past Year\n          value: qdr:y\n        - label: Custom Dates\n          value: custom\n    - type: calc\n      func: set\n      param: dateFilter\n      value: '&tbs={{dateFilter_set}}'\n- label: BUILD_URL\n  type: group\n  steps:\n    - label: ENCODE_QUERY\n      type: calc\n      func: encode-url\n      param: query\n      to: encodedQuery\n    - type: calc\n      func: set\n      param: builtURL\n      value: 'https://www.google.com/search?q={{encodedQuery}}&tbm={{searchType}}{{dateFilter}}'\n    - type: say\n      message: '🔧 URL built for \"{{query}}\": `{{builtURL}}`'\n    - type: wait\n      for: 2s\n      silent: true\n- type: navigate\n  url: '{{builtURL}}'\n  waitForIdle: true\n  silent: false\n- label: GPT\n  type: gpt\n  prompt: 'I am looking for articles by / about: \"{{query}}\". Please review the search RESULTS below and extract those that are relevant, presenting the items as a table with the following headers: Title, Date, Publication, Author, URL.'\n  param: gpt_parse\n- type: ask\n  param: progressQ\n  message: 'New search or terminate Command?'\n  options:\n    - label: 🔎 New Search\n      value: new_search\n    - label: ⛔ Terminate Command\n      value: end\n- condition: '{{progressQ}} = new_search'\n  type: jump\n  to: SETUP\n- type: stop",
+            "version": 1,
+            "share": {
+              "isPublic": false
             }
           }
-        ]
-      }
-    },
+      },
     "Parameter_Management": {
       "Predefined_Parameters": {
         "description": "Predefined parameters are automatically injected into prompts to provide dynamic content from the web page context.",
@@ -78,19 +252,6 @@
           "usage": "To generate content, provide information, or continue a conversation flow based on user input."
         }
       ]
-    },
-    "Building_Sophisticated_Use_Cases": {
-      "Advanced_Implementation": {
-        "Sample_Advanced_Use_Case": {
-          "meta": {
-            "title": "Data Aggregation and Reporting",
-            "description": "Aggregates data from various sources and compiles a report.",
-            "category": "Data Analysis"
-          },
-          "steps": []
-        },
-        "Modular_Command_Structure": {}
-      }
     },
     "Commands_Documentation": {
       "Navigate_Command": {
